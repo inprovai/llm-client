@@ -1,6 +1,25 @@
 # @inprov/llm-client
 
-Client library for the Inprov LLM API.
+Client library for the Inprov LLM API (Ollama-based).
+
+## Configuration
+
+### Required Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `INPROV_LLM_API_KEY` | **Required.** API key for authentication |
+
+### Optional Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `INPROV_LLM_BASE_URL` | `https://ollama.inprov.app` | API base URL |
+| `INPROV_LLM_MODEL` | `Deepseek-Coder:latest` | Default model to use |
+| `INPROV_LLM_TIMEOUT_MS` | `60000` | Request timeout in milliseconds |
+| `INPROV_LLM_ENABLED` | `false` | Enable/disable the client |
+
+> **Note:** For inprov-platform, all environment variables are managed via [Doppler](https://doppler.com). Run `doppler setup` to configure your local environment.
 
 ## Installation
 
@@ -16,7 +35,7 @@ npm install inprovai/llm-client
 import { InprovLLM } from "@inprov/llm-client";
 
 const llm = new InprovLLM({
-  apiKey: process.env.INPROV_LLM_API_KEY,
+  apiKey: process.env.INPROV_LLM_API_KEY!, // Required
 });
 
 // Simple prompt
@@ -29,7 +48,9 @@ console.log(response);
 ```typescript
 import { InprovLLM } from "@inprov/llm-client";
 
-const llm = new InprovLLM();
+const llm = new InprovLLM({
+  apiKey: process.env.INPROV_LLM_API_KEY!, // Required
+});
 
 const response = await llm.chat([
   { role: "system", content: "You are a helpful coding assistant." },
@@ -45,10 +66,10 @@ console.log(response.message.content);
 import { InprovLLM } from "@inprov/llm-client";
 
 const llm = new InprovLLM({
-  apiKey: process.env.INPROV_LLM_API_KEY, // Required if server has auth enabled
-  baseUrl: "https://ollama.inprov.app",   // or http://localhost:63000
-  defaultModel: "Deepseek-Coder:latest",
-  timeout: 60000,
+  apiKey: process.env.INPROV_LLM_API_KEY!, // Required
+  baseUrl: "https://ollama.inprov.app",    // Default
+  defaultModel: "Deepseek-Coder:latest",   // Default
+  timeout: 60000,                          // Default
 });
 ```
 
@@ -83,7 +104,7 @@ new InprovLLM(config?: InprovLLMConfig)
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `apiKey` | string | - | API key for authentication |
+| `apiKey` | string | - | **Required.** API key for authentication |
 | `baseUrl` | string | `https://ollama.inprov.app` | API base URL |
 | `defaultModel` | string | `Deepseek-Coder:latest` | Default model to use |
 | `timeout` | number | `60000` | Request timeout in ms |
