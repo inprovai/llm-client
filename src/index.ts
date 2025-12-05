@@ -33,7 +33,7 @@ export interface InprovLLMConfig {
   timeout?: number;
 }
 
-const DEFAULT_BASE_URL = "https://ollama.inprov.com";
+const DEFAULT_BASE_URL = "https://ollama.inprov.app";
 const DEFAULT_MODEL = "Deepseek-Coder:latest";
 const DEFAULT_TIMEOUT = 60000;
 
