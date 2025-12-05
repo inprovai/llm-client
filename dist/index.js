@@ -31,18 +31,25 @@ var DEFAULT_TIMEOUT = 6e4;
 var InprovLLM = class {
   constructor(config = {}) {
     this.baseUrl = config.baseUrl?.replace(/\/$/, "") || DEFAULT_BASE_URL;
+    this.apiKey = config.apiKey;
     this.defaultModel = config.defaultModel || DEFAULT_MODEL;
     this.timeout = config.timeout || DEFAULT_TIMEOUT;
   }
   async fetch(endpoint, options) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+    const headers = {
+      "Content-Type": "application/json"
+    };
+    if (this.apiKey) {
+      headers["Authorization"] = `Bearer ${this.apiKey}`;
+    }
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
         signal: controller.signal,
         headers: {
-          "Content-Type": "application/json",
+          ...headers,
           ...options?.headers
         }
       });

@@ -28,6 +28,7 @@ export interface HealthStatus {
 
 export interface InprovLLMConfig {
   baseUrl?: string;
+  apiKey?: string;
   defaultModel?: string;
   timeout?: number;
 }
@@ -38,11 +39,13 @@ const DEFAULT_TIMEOUT = 60000;
 
 export class InprovLLM {
   private baseUrl: string;
+  private apiKey?: string;
   private defaultModel: string;
   private timeout: number;
 
   constructor(config: InprovLLMConfig = {}) {
     this.baseUrl = config.baseUrl?.replace(/\/$/, "") || DEFAULT_BASE_URL;
+    this.apiKey = config.apiKey;
     this.defaultModel = config.defaultModel || DEFAULT_MODEL;
     this.timeout = config.timeout || DEFAULT_TIMEOUT;
   }
@@ -54,12 +57,20 @@ export class InprovLLM {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (this.apiKey) {
+      headers["Authorization"] = `Bearer ${this.apiKey}`;
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
         signal: controller.signal,
         headers: {
-          "Content-Type": "application/json",
+          ...headers,
           ...options?.headers,
         },
       });

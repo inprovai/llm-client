@@ -23,11 +23,13 @@ interface HealthStatus {
 }
 interface InprovLLMConfig {
     baseUrl?: string;
+    apiKey?: string;
     defaultModel?: string;
     timeout?: number;
 }
 declare class InprovLLM {
     private baseUrl;
+    private apiKey?;
     private defaultModel;
     private timeout;
     constructor(config?: InprovLLMConfig);

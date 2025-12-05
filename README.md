@@ -5,7 +5,7 @@ Client library for the Inprov LLM API.
 ## Installation
 
 ```bash
-npm install @inprov/llm-client
+npm install inprovai/llm-client
 ```
 
 ## Usage
@@ -13,10 +13,14 @@ npm install @inprov/llm-client
 ### Basic Usage
 
 ```typescript
-import { inprovLLM } from "@inprov/llm-client";
+import { InprovLLM } from "@inprov/llm-client";
+
+const llm = new InprovLLM({
+  apiKey: process.env.INPROV_LLM_API_KEY,
+});
 
 // Simple prompt
-const response = await inprovLLM.prompt("Write a hello world in Python");
+const response = await llm.prompt("Write a hello world in Python");
 console.log(response);
 ```
 
@@ -41,7 +45,8 @@ console.log(response.message.content);
 import { InprovLLM } from "@inprov/llm-client";
 
 const llm = new InprovLLM({
-  baseUrl: "https://ollama.inprov.com", // or http://localhost:63000
+  apiKey: process.env.INPROV_LLM_API_KEY, // Required if server has auth enabled
+  baseUrl: "https://ollama.inprov.com",   // or http://localhost:63000
   defaultModel: "Deepseek-Coder:latest",
   timeout: 60000,
 });
@@ -78,6 +83,7 @@ new InprovLLM(config?: InprovLLMConfig)
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
+| `apiKey` | string | - | API key for authentication |
 | `baseUrl` | string | `https://ollama.inprov.com` | API base URL |
 | `defaultModel` | string | `Deepseek-Coder:latest` | Default model to use |
 | `timeout` | number | `60000` | Request timeout in ms |
